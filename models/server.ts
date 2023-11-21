@@ -1,10 +1,9 @@
 import express, { Application } from 'express'
 
 class Server {
-  
   private app: Application;
   private port: string ;
-
+  
   constructor() {
     this.app = express();
     this.port = process.env.PORT || '8000';
@@ -14,7 +13,10 @@ class Server {
       console.log(`Servidor corriendo en puerto: http://localhost:${this.port}`)
     })
   }
+
 }
 
-
 export default Server
+
+ 
+  
