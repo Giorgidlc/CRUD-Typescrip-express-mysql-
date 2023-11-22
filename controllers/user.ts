@@ -29,7 +29,8 @@ export const putUser = (req: Request, res: Response) => {
   const { body } = req;
   res.json({
     msg: 'putUser',
-    body
+    body,
+    id
   })
 }
 
