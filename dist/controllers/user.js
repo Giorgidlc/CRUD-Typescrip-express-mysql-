@@ -92,10 +92,6 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (error) {
         res.status(500).send({ message: error.message });
     }
-    res.json({
-        msg: 'deleteUser',
-        id
-    });
 });
 exports.deleteUser = deleteUser;
 //# sourceMappingURL=user.js.map

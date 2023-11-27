@@ -70,8 +70,4 @@ export const deleteUser = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).send({ message: (error as Error).message })
   }
-  res.json({
-    msg: 'deleteUser',
-    id
-  })
 }
