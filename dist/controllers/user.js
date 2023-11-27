@@ -49,7 +49,7 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (existingEmail) {
             res.status(400).json(`Email already exists: ${body.email_user}`);
         }
-        const user = new user_1.default(body);
+        const user = user_1.default.build(body);
         yield user.save();
         res.status(201).json({ user });
     }
@@ -59,6 +59,7 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.postUser = postUser;
 const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     const { id } = req.params;
     const { body } = req;
     try {
@@ -66,21 +67,35 @@ const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!user) {
             return res.status(404).json({ message: `user with ${id} not found` });
         }
-        const instance = yield user;
-        instance.update(body);
-        res.status(200).json({ user: instance });
+        const updateUser = yield user;
+        (_a = (updateUser)) === null || _a === void 0 ? void 0 : _a.update(body);
+        (_b = (updateUser)) === null || _b === void 0 ? void 0 : _b.save();
+        res.status(200).json({ user: updateUser });
     }
     catch (error) {
         res.status(500).send({ message: error.message });
     }
 });
 exports.putUser = putUser;
-const deleteUser = (req, res) => {
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
     const { id } = req.params;
+    try {
+        const user = user_1.default.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ message: `user with ${id} not found` });
+        }
+        const deleteUser = yield user;
+        (_c = (deleteUser)) === null || _c === void 0 ? void 0 : _c.destroy();
+        res.status(200).json({ message: 'Deleted successfully' });
+    }
+    catch (error) {
+        res.status(500).send({ message: error.message });
+    }
     res.json({
         msg: 'deleteUser',
         id
     });
-};
+});
 exports.deleteUser = deleteUser;
 //# sourceMappingURL=user.js.map

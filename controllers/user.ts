@@ -30,7 +30,7 @@ export const postUser = async (req: Request, res: Response) => {
     if (existingEmail) {
       res.status(400).json(`Email already exists: ${body.email_user}`)
     }
-    const user = new User(body);
+    const user = User.build(body);
     await user.save();
     res.status(201).json({ user });
   } catch (error) {
@@ -46,9 +46,10 @@ export const putUser = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: `user with ${id} not found` });
     } 
-    const instance: any = await user;
-    instance.update(body);
-    res.status(200).json({ user: instance });
+    const updateUser = await user;
+    (updateUser)?.update(body);
+    (updateUser)?.save();
+    res.status(200).json({ user: updateUser });
  
   } catch (error) {
     res.status(500).send({ message: (error as Error).message })
@@ -56,8 +57,19 @@ export const putUser = async (req: Request, res: Response) => {
   
 }
 
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params
+  try {
+    const user = User.findByPk(id)
+    if (!user) {
+      return res.status(404).json({ message: `user with ${id} not found`})
+    } 
+    const deleteUser = await user;
+    (deleteUser)?.destroy()
+    res.status(200).json({ message: 'Deleted successfully'})
+  } catch (error) {
+    res.status(500).send({ message: (error as Error).message })
+  }
   res.json({
     msg: 'deleteUser',
     id
